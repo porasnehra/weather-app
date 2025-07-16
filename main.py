@@ -3,17 +3,14 @@ import requests
 
 def get_weather():
     city = city_entry.get()
-    if not city:
-        city = "London"
-
-    api_key = ""  # Replace with your key from OpenWeatherMap
+    api_key = "bb5ec23ed2184a81a8d24755252206"  # Replace with your OpenWeatherMap API key
     url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
-
+    
     try:
         response = requests.get(url)
         data = response.json()
 
-        if data.get("cod") == 200:
+        if data["cod"] == 200:
             temperature = data["main"]["temp"]
             description = data["weather"][0]["description"]
             humidity = data["main"]["humidity"]
@@ -21,20 +18,19 @@ def get_weather():
 
             result = f"City: {city}\nTemperature: {temperature}°C\nWeather: {description}\nHumidity: {humidity}%\nWind Speed: {wind} m/s"
         else:
-            result = f"City '{city}' not found!"
+            result = "City not found!"
     except:
         result = "Error retrieving data."
 
     result_label.config(text=result)
 
-# GUI setup
+# GUI Setup
 root = tk.Tk()
 root.title("Weather App")
 root.geometry("300x300")
 
 tk.Label(root, text="Enter City Name:").pack(pady=10)
 city_entry = tk.Entry(root, width=25)
-city_entry.insert(0, "London")
 city_entry.pack(pady=5)
 
 tk.Button(root, text="Get Weather", command=get_weather).pack(pady=10)
